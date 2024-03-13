@@ -7,6 +7,7 @@ from ucimlrepo import fetch_ucirepo
 from Node import Node 
 
 
+
 def crearArbol(data: DataFrame,categoria:int,indice:str,nodo:Node):
     datoPrueba = data[data.columns[len(data.columns)-1]].iloc[0]
     for dato in data[data.columns[len(data.columns)-1]]:
@@ -50,7 +51,9 @@ except:
 print(X)
 nodoRaiz = Node()
 crearArbol(X,0,"1",nodoRaiz)
-print(cantPunts)
+
+
+
 
 
 
