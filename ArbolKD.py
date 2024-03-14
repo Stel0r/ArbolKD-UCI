@@ -7,7 +7,8 @@ from ucimlrepo import fetch_ucirepo
 from Node import Node 
 
 
-def crearArbol(data: DataFrame,categoria:int,indice:str,nodo:Node):
+def crearArbol(data: DataFrame,categoria:int,indice:str,nodo:Node,nodoRaiz:Node,nivel:int):
+    nodoRaiz.profundidad = nivel if nivel > nodoRaiz.profundidad else nodoRaiz.profundidad
     datoPrueba = data[data.columns[len(data.columns)-1]].iloc[0]
     for dato in data[data.columns[len(data.columns)-1]]:
         if dato != datoPrueba:
@@ -24,8 +25,8 @@ def crearArbol(data: DataFrame,categoria:int,indice:str,nodo:Node):
             nuevaCategoria = categoria + 1 if categoria + 1 != len(data.columns)-1 else 0
             nodo.izq = Node()
             nodo.der = Node()
-            crearArbol(data.iloc[:mitad],nuevaCategoria,indice+".1",nodo.izq)
-            crearArbol(data.iloc[mitad:],nuevaCategoria,indice+".2",nodo.der)
+            crearArbol(data.iloc[:mitad],nuevaCategoria,indice+".1",nodo.izq,nodoRaiz,nivel+1)
+            crearArbol(data.iloc[mitad:],nuevaCategoria,indice+".2",nodo.der,nodoRaiz,nivel+1)
             return
     print(str(indice) +" - "+ str(data[data.columns[len(data.columns)-1]].iloc[0]))   
     nodo.valor = str(data[data.columns[len(data.columns)-1]].iloc[0])
@@ -49,8 +50,9 @@ except:
     print("no se ha agregado la fila target o no esta definida")
 print(X)
 nodoRaiz = Node()
-crearArbol(X,0,"1",nodoRaiz)
-print(cantPunts)
+crearArbol(X,0,"1",nodoRaiz,nodoRaiz,1)
+
+print(nodoRaiz.profundidad)
 
 
 

@@ -3,4 +3,6 @@ class Node:
         self.valor: str = ""
         self.izq:Node = None
         self.der:Node = None
+        self.profundidad = 0
+        
         
