@@ -1,8 +1,9 @@
-class Node:
+
+class Nodo:
     def __init__(self):
         self.valor: str = ""
-        self.izq:Node = None
-        self.der:Node = None
+        self.izq:Nodo = None
+        self.der:Nodo = None
         self.profundidad = 0
         
-        
+    
