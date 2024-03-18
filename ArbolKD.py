@@ -24,17 +24,24 @@ def crearArbol(data: DataFrame,categoria:int,indice:str,nodo:Nodo,nodoRaiz:Nodo,
                 val = data[data.columns[categoria]].iloc[mitad]
             else:
                 val = (data[data.columns[categoria]].iloc[mitad] + data[data.columns[categoria]].iloc[mitad+1])/2
-            print(str(indice) +" - "+ data.columns[categoria] + " <= " + str(val))
-            nodo.valor = data.columns[categoria] + " <= " + str(val)
+            nodo.valor = data.columns[categoria] + " <= " + str(val)          
             nuevaCategoria = categoria + 1 if categoria + 1 != len(data.columns)-1 else 0
             nodo.izq = Nodo()
             nodo.der = Nodo()
+            nodo.izq.reglas = nodo.reglas [::1]
+            nodo.der.reglas = nodo.reglas [::1]
+            nodo.izq.reglas.append(data.columns[categoria] + " <= " + str(val) )
+            nodo.der.reglas.append(data.columns[categoria] + " > " + str(val) )
             crearArbol(data.iloc[:mitad],nuevaCategoria,indice+".1",nodo.izq,nodoRaiz,nivel+1)
             crearArbol(data.iloc[mitad:],nuevaCategoria,indice+".2",nodo.der,nodoRaiz,nivel+1)
             return
-    print(str(indice) +" - "+ str(data[data.columns[len(data.columns)-1]].iloc[0]))   
     nodo.valor = str(data[data.columns[len(data.columns)-1]].iloc[0])
-  
+    nodo.reglas.append(nodo.valor)
+    for i in nodo.reglas:
+        print(i)
+    print()
+    #input()
+    
 def graficarArbol(nodoRaiz:Nodo):
     app = QtWidgets.QApplication([])
         
@@ -51,6 +58,14 @@ def graficarArbol(nodoRaiz:Nodo):
     ventana.show()
     sys.exit(app.exec())
     
+def reescritura(data:DataFrame, nodo:Nodo):
+    aciertos = 0
+    for registro in data.index:
+        resultado = nodo.reescritura((data.iloc[registro:registro+1]))
+        aciertos = aciertos + 1 if resultado else aciertos
+    print("----------------- RESULTADOS REESCRITURA -----------------")
+    print("Aciertos: "+str(aciertos))
+    print("Precision: "+f'{aciertos/len(data.index):5.2f}'+"%")
   
 # fetch dataset 
 repo = fetch_ucirepo(id=15) 
@@ -70,7 +85,7 @@ except:
     print("no se ha agregado la fila target o no esta definida")
 nodoRaiz = Nodo()
 crearArbol(X,0,"1",nodoRaiz,nodoRaiz,1)
-
+reescritura(X,nodoRaiz)
 graficarArbol(nodoRaiz)
 
 
