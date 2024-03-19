@@ -65,7 +65,7 @@ def reescritura(data:DataFrame, nodo:Nodo):
         aciertos = aciertos + 1 if resultado else aciertos
     print("----------------- RESULTADOS REESCRITURA -----------------")
     print("Aciertos: "+str(aciertos))
-    print("Precision: "+f'{aciertos/len(data.index):5.2f}'+"%")
+    print("Precision: "+f'{(aciertos/len(data.index))*100:5.2f}'+"%")
   
 # fetch dataset 
 repo = fetch_ucirepo(id=15) 
